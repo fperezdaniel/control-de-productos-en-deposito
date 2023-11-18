@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Login</title>
+</head>
+
+<body>
+    <!-- Login usuario -->
+    <form id="form-login" class="form-login-container">
+        <h5 class="titulo-login">
+            Bienvenido al login
+        </h5>
+        <input class="input-login" name="nombre-usuario" type="text" placeholder="nombre usuario">
+        <input class="input-login" name="contrasenia-usuario" type="text" placeholder="cotrasenia usuario">
+        <button id="login-aceptar" class="boton-login">Login</button>
+        <button id="login-cancelar" class="boton-login" type="reset">Reset</button>
+    </form>
+    <!-- Fin login usuario -->
+    <!-- Menu -->
+    <div  id="container-menu" class="container-menu-class"></div>
+    <!-- Fin menu -->
+    
+    <!-- Carga de productos si-->
+    <div id="carga-producto" class="container-producto-opcion"></div>
+    <!-- Fin carga de productos -->
+    <!-- Filtrado de productos si-->
+    <section id="section-producto-filtrado" class="producto-filtrado"></section>
+    <!-- Producto Filtrado si-->
+    <section id="section-contenedor" class="section-container-deposito"></section>
+    <!-- Fin filtrado de productos -->
+    <!-- Producto agregar a array -->
+    <section></section>
+    <!-- fin producto agregar a array -->
+    <!-- section buscar producto en existencia -->
+    <section id="container-buscar-producto" class="buscar-codigo-producto"></section>
+    <!-- Fin buscar producto existencia -->
+    <!--Section agregar codigo-->
+    <section id="container-agregar-codigo" class="agregar-codigo-container"></section>
+    <!-- Fin agregar codigo -->
+    <!-- Script -->
+    <script src="js/validacionesArchivodeposito.js"></script>
+    <script src="js/deposito.js"></script>
+    <script src="js/producto.js"></script>
+    <script src="js/cargaDeProductos.js"></script>
+    <script src="js/inicio.js"></script>
+</body>
+
+</html>
+
