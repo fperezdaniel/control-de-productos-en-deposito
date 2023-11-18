@@ -90,7 +90,6 @@ class Deposito {
         }
     }
     corroborarExistencia(elemento) {
-        this.deposito.length;
         return this.deposito.some((el) => el.nombre === elemento.nombre);
     }
     buscarProductoPorIndice(objet) {
