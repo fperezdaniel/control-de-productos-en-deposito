@@ -284,6 +284,7 @@ const validarInputproducto = (e) => {
 				stock: stock,
 				precio: precio,
 			});
+			console.log(productoDelUsuario, " linea 287 productoDelUsuario");
 			accesoIndice(productoDelUsuario);
 			objetoDeposito.renderizarFiltrado(objetoDeposito.deposito);
 		} else {
@@ -302,6 +303,7 @@ function validarCargaDeProducto() {
 
 /** Acceso Indice */
 function accesoIndice(elemento) {
+	console.log(elemento, " linea 306 producto del ususario");
 	const existenciaEnDeposito = objetoDeposito.corroborarExistencia(elemento);
     console.log(existenciaEnDeposito, "existencia en deposito linea 305");
 	if (existenciaEnDeposito) {
