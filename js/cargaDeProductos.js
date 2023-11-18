@@ -285,8 +285,8 @@ const validarInputproducto = (e) => {
 				precio: precio,
 			});
 			console.log(productoDelUsuario, " linea 287 productoDelUsuario");
-			accesoIndice(productoDelUsuario);
-			objetoDeposito.renderizarFiltrado(objetoDeposito.deposito);
+			evaluarExistenciaDelProductoEnDeposito(productoDelUsuario);
+			////
 		} else {
 			alert("Se observan campos vacios por favor completelos todos");
 		}
@@ -302,7 +302,7 @@ function validarCargaDeProducto() {
 /*Ver el tema del indice que me devuelve la funcion*/
 
 /** Acceso Indice */
-function accesoIndice(elemento) {
+function evaluarExistenciaDelProductoEnDeposito(elemento) {
 	console.log(elemento, " linea 306 producto del ususario");
 	const existenciaEnDeposito = objetoDeposito.corroborarExistencia(elemento);
     console.log(existenciaEnDeposito, "existencia en deposito linea 305");
@@ -312,13 +312,17 @@ function accesoIndice(elemento) {
 		console.log(indiceProducto, "  IndiceProducto");
 		const indicePropiedadStock = objetoDeposito.accederPropiedadEnArray(indiceProducto);
 		console.log(indicePropiedadStock);
-		objetoDeposito.agregarProducto(elemento);
-		
+		objetoDeposito.renderizarFiltrado(objetoDeposito.deposito);
+		///objetoDeposito.agregarProducto(elemento);
 	} else {
 		objetoDeposito.agregarProducto(elemento);
+		objetoDeposito.renderizarFiltrado(objetoDeposito.deposito);
 	}
 }
-
+/** estoy pasando por parametro la variable productoDelUsuario a la funcion  evaluarExistenciaDelProductoEnDeposito, 
+ * primero verifico si el producto ya existe 
+ * si existe el producto aplico el metodo buscarProductoPorIndice 
+ * pasandole el objeto creado por el usuario. El tema es que cuando busco por indice me figura el indice 14*/ 
 
 /** fin acceso indice */
 ///////////////////////////////////////////////////////
