@@ -22,7 +22,7 @@ const entraña = new Producto({
 	categoria: "carne",
 	nombre: "entraña",
 	marca: "coto",
-	codigo: "",
+	codigo: "AUR282",
 	stock: 200,
 	precio: 1200,
 });
@@ -31,7 +31,7 @@ const tiraDeAsado = new Producto({
 	categoria: "carne",
 	nombre: "tira de asado",
 	marca: "coto",
-	codigo: "",
+	codigo: "AUR283",
 	stock: 300,
 	precio: 2500,
 });
@@ -60,7 +60,7 @@ const facturas = new Producto({
 	categoria: "panificado",
 	nombre: "facturas de manteca",
 	marca: "coto",
-	codigo: "",
+	codigo: "ABC229",
 	stock: 100,
 	precio: 1800,
 });
@@ -78,7 +78,7 @@ const baguette = new Producto({
 	categoria: "panificado",
 	nombre: "baguette",
 	marca: "coto",
-	codigo: "",
+	codigo: "ABC231",
 	stock: 100,
 	precio: 200,
 });
@@ -98,6 +98,7 @@ const tv = new Producto({
 	categoria: "electronicos",
 	nombre: "QLED Samsung 55",
 	marca: "samsung",
+	codigo: "ADR997",
 	stock: 10,
 	precio: 370050,
 });
@@ -115,6 +116,7 @@ const playCinco = new Producto({
 	categoria: "electronicos",
 	nombre: "playstation 5",
 	marca: "sony",
+	codigo: "ADR999",
 	stock: 10,
 	precio: 1000000,
 
@@ -123,7 +125,7 @@ const parlanteBluetooth = new Producto({
 	categoria: "electronicos",
 	nombre: "parlante con bluetooth",
 	marca: "philco",
-	codigo: "ADR999",
+	codigo: "ADR1000",
 	stock: 4,
 	precio: 32000,
 });
@@ -145,7 +147,7 @@ objetoDeposito.agregarProducto(bifeChorizo);
 objetoDeposito.agregarProducto(vacio);
 objetoDeposito.agregarProducto(entraña);
 objetoDeposito.agregarProducto(tiraDeAsado);
-objetoDeposito.agregarProducto(chorizo); 
+objetoDeposito.agregarProducto(chorizo);
 /** categoria panificado */
 objetoDeposito.agregarProducto(pan);
 objetoDeposito.agregarProducto(facturas);
@@ -160,12 +162,13 @@ objetoDeposito.agregarProducto(parlanteBluetooth);
 objetoDeposito.agregarProducto(monitorPc);
 
 
+/////objetoDeposito.renderizarProducto(objetoDeposito.deposito);
+///////////////////////////
 
 ///////////////////////////////////////////
 /** Menu en deposito */
 function menuEnPantalla() {
 	const containerMenu = document.getElementById("container-menu");
-	console.log("containerMenu ", containerMenu);
 	const cardMenu = document.createElement("div");
 	cardMenu.setAttribute("class", "card-container-menu")
 	cardMenu.innerHTML = `  
@@ -173,9 +176,8 @@ function menuEnPantalla() {
                             <div class="parrafo-option">
 	                            <p>A.Cargar producto.</p>
 	                            <p>B.Filtrar producto por categoría.</p>
-	                            <p>C.Verificar codigos.</p>
-	                            <p>D.Calculo total.</p>
-								<p>E.Ver productos.</p>
+	                            <p>C.Buscar producto por nombre.</p>
+								<p>D.Ver productos.</p>
                             </div>
                             <form id="form-menu" class= "form-menu-opcion">
 	                            <input class="input-menu" name="opcion-usuario" type="text">
@@ -189,39 +191,31 @@ function menuEnPantalla() {
 
 function formMenuOpciones() {
 	const formMenu = document.getElementById("form-menu");
-	console.log("formMenu 10", formMenu);
 	const menuInput = (e) => {
 		e.preventDefault();
 		const inputOpcionesDelusuario = formMenu["opcion-usuario"].value.toUpperCase();
-		console.log("InputMenu", inputOpcionesDelusuario);
 		opcionesDelUsuario(inputOpcionesDelusuario);
 	}
 	formMenu.addEventListener("submit", menuInput);
 }
+
 /**Opciones de menu */
 function opcionesDelUsuario(opcionUsuario) {
-	if (opcionUsuario === null) {
-		validandoNullEnDeposito();
-	} else {
-		switch (opcionUsuario) {
-			case "A":
-				cargaDeProductosRenderizados();
-				break;
-			case "B":
-				renderizarProductoFiltrado();
-				break;
-			case "C":
-				buscarProducto();
-				break;
-			case "D":
-				/** calculoTotal (); */
-				break;
-			case "E":
-				verProductos();
-				break;
-			default:
-				alert("Error al ingresar datos, vuelva a intentar");
-		}
+	switch (opcionUsuario) {
+		case "A":
+			cargaDeProductos();
+			break;
+		case "B":
+			buscarProductoPorcategoria();
+			break;
+		case "C":
+			buscarProductoPorNombre();
+			break;
+		case "D":
+			verProductos();
+			break;
+		default:
+			alert("Error al ingresar datos, vuelva a intentar");
 	}
 }
 
@@ -229,13 +223,11 @@ function opcionesDelUsuario(opcionUsuario) {
 /////////////////////////////////////////////////////////
 
 /** carga de producto */
-function cargaDeProductosRenderizados() {
+function cargaDeProductos() {
 	const formProductoCarga = document.getElementById("carga-producto");
 	formProductoCarga.innerHTML = "";
-	console.log("formProductos ", formProductoCarga);
 	const cardProductos = document.createElement("div");
 	cardProductos.setAttribute("class", "div-container-inputs");
-	console.log("cardProducto ", cardProductos);
 	cardProductos.innerHTML = `
 								<form  id= "form-inputs-producto" class= "formulario-producto-opcion">
 								<p class="parrafo-productos"><span class= "span-option">Ingrese la categoria del producto por favor:</span> panificado, carne, electronicos, limpieza.</p> 
@@ -246,17 +238,19 @@ function cargaDeProductosRenderizados() {
                                     <input class= "input-opcion-producto" name="opcion-stock" type="text" placeholder="Stock del producto">
                                     <input class= "input-opcion-producto" name="opcion-precio" type="text" placeholder="Precio del producto">
                                     <button  class="boton-producto">Aceptar</button>
-                                    <button class="boton-producto-reset" type="reset">Cancelar</button>
+                                    <button class="boton-producto-reset" type="reset">Borras campos</button>
 									<button id ="btn-cancel-form" class="boton-producto-x">X</button>
 								</form>
 								
                                 `;
 	formProductoCarga.appendChild(cardProductos);
 	const btnCancel = document.getElementById("btn-cancel-form");
-	console.log(btnCancel);
+	const contenedorProducto = document.getElementById("section-contenedor");
 	btnCancel.addEventListener("click", () => {
 		formProductoCarga.innerHTML = "";
-	})
+		contenedorProducto.innerHTML = "";
+	});
+
 	validarCargaDeProducto();
 }
 
@@ -270,76 +264,41 @@ const validarInputproducto = (e) => {
 	const codigo = formProducto["opcion-codigo"].value.toUpperCase();
 	const stock = parseInt(formProducto["opcion-stock"].value);
 	const precio = parseFloat(formProducto["opcion-precio"].value);
-	if (categoria === null || nombre === null || marca === null || codigo === null || stock === null || precio === null) {
-		alert("Debe completar todos los campos por favor");
-		validandoNullEnDeposito();
+	//// validando input
+	const validacionPrompt = validandoPromptDeposito(categoria, nombre, marca, codigo, stock, precio);
+	if (validacionPrompt) {
+		const productoDelUsuario = new Producto({
+			categoria: categoria,
+			nombre: nombre,
+			marca: marca,
+			codigo: codigo,
+			stock: stock,
+			precio: precio,
+		});
+		objetoDeposito.agregarProducto(productoDelUsuario);
+		objetoDeposito.renderizarProducto(objetoDeposito.deposito);
+		const calculoDeProductos = objetoDeposito.calculoDeproductos();
+		objetoDeposito.renderizarCalculoDeProductos(calculoDeProductos);
 	} else {
-		const validacionPrompt = validandoPromptDeposito(categoria, nombre, marca, codigo, stock, precio);
-		if (validacionPrompt) {
-			const productoDelUsuario = new Producto({
-				categoria: categoria,
-				nombre: nombre,
-				marca: marca,
-				codigo: codigo,
-				stock: stock,
-				precio: precio,
-			});
-			console.log(productoDelUsuario, " linea 287 productoDelUsuario");
-			evaluarExistenciaDelProductoEnDeposito(productoDelUsuario);
-			////
-		} else {
-			alert("Se observan campos vacios por favor completelos todos");
-		}
+		alert("Se observan campos vacios por favor completelos todos");
 	}
 }
 
 function validarCargaDeProducto() {
 	const formProductos = document.getElementById("form-inputs-producto");
-	console.log("formProductos line 299", formProductos);
 	formProductos.addEventListener("submit", validarInputproducto);
 
 }
-/*Ver el tema del indice que me devuelve la funcion*/
 
-/** Acceso Indice */
-function evaluarExistenciaDelProductoEnDeposito(elemento) {
-	console.log(elemento, " linea 306 producto del ususario");
-	const existenciaEnDeposito = objetoDeposito.corroborarExistencia(elemento);
-    console.log(existenciaEnDeposito, "existencia en deposito linea 305");
-	if (existenciaEnDeposito) {
-		alert("Este producto ya se encuentra en deposito, desea sumar el stock???");
-		const indiceProducto = objetoDeposito.buscarProductoPorIndice(elemento);
-		console.log(indiceProducto, "  IndiceProducto");
-		const indicePropiedadStock = objetoDeposito.accederPropiedadEnArray(indiceProducto);
-		console.log(indicePropiedadStock);
-		objetoDeposito.renderizarFiltrado(objetoDeposito.deposito);
-		///objetoDeposito.agregarProducto(elemento);
-	} else {
-		objetoDeposito.agregarProducto(elemento);
-		objetoDeposito.renderizarFiltrado(objetoDeposito.deposito);
-	}
-}
-/** estoy pasando por parametro la variable productoDelUsuario a la funcion  evaluarExistenciaDelProductoEnDeposito, 
- * primero verifico si el producto ya existe 
- * si existe el producto aplico el metodo buscarProductoPorIndice 
- * pasandole el objeto creado por el usuario. El tema es que cuando busco por indice me figura el indice 14*/ 
 
-/** fin acceso indice */
 ///////////////////////////////////////////////////////
 
-/**
- * 
-		const stockSumado = indicePropiedadStock + elemento.stock;
-		console.log(stockSumado);
-		elemento.stock = stockSumado
-		console.log(elemento, " elemento con stock sumado");
- */
+
 /** metodo filter */
 
 
-function renderizarProductoFiltrado() {
+function buscarProductoPorcategoria() {
 	const sectionProductoFiltrado = document.getElementById("section-producto-filtrado");
-	console.log(sectionProductoFiltrado, "sectionproductoFiltrado");
 	const cardProductoFiltrado = document.createElement("div");
 	cardProductoFiltrado.setAttribute("class", "container-form-filtrado");
 	cardProductoFiltrado.innerHTML = `
@@ -354,18 +313,16 @@ function renderizarProductoFiltrado() {
                                         </form>`;
 	sectionProductoFiltrado.appendChild(cardProductoFiltrado);
 	const formularioProductoFiltrado = document.getElementById("form-filtrado-producto");
-	console.log("formularioProductoFiltrado ", formularioProductoFiltrado);
 	const productoFiltrado = (evento) => {
 		evento.preventDefault();
-
 		const usuarioFiltrarproducto = formularioProductoFiltrado["filtrando-producto"].value.toLowerCase();
-		console.log(usuarioFiltrarproducto);
 		if (usuarioFiltrarproducto === "" || usuarioFiltrarproducto === null) {
 			alert("Datos invalidos");
 		} else {
 			const productoObtenidoFilter = objetoDeposito.filtrarProducto(usuarioFiltrarproducto);
-			console.log(productoObtenidoFilter);
-			objetoDeposito.renderizarFiltrado(productoObtenidoFilter);
+			objetoDeposito.renderizarProducto(productoObtenidoFilter);
+			const total = objetoDeposito.calculoDeproductosFiltrados(productoObtenidoFilter);
+			objetoDeposito.renderizarCalculoDeProductos(total);
 		}
 	}
 	formularioProductoFiltrado.addEventListener("submit", productoFiltrado);
@@ -387,9 +344,9 @@ function vaciarListaproductoFiltrado(e) {
 
 //////////////////////////////////////////////////////////////////////
 
+/** Buscar producto por nombre */
 
-
-function buscarProducto() { /** Ver esta funcion si la puedo mejorar */
+function buscarProductoPorNombre() {
 	const containerBuscarProducto = document.getElementById("container-buscar-producto");
 	containerBuscarProducto.innerHTML = "";
 	const cardNombreProducto = document.createElement("div");
@@ -399,33 +356,69 @@ function buscarProducto() { /** Ver esta funcion si la puedo mejorar */
                                         <h5 class="titulo-buscar-codigo">Ingrese nombre producto</h5>
                                         <input class="input-carga-codigo" name="cargar-codigo" type="text" placeholder="nombre">
                                         <button class= "btn-buscar-codigo">Aceptar</button>
+										<button id= "ver-listado" class= "btn-buscar-codigo">Ver listado</button>
                                     </form>`;
 	containerBuscarProducto.appendChild(cardNombreProducto);
 	const formCargarProducto = document.getElementById("form-cargar-codigo");
+	const btnVerListado = document.getElementById("ver-listado");
+	btnVerListado.addEventListener("click", verListadoProducto);
 	const buscarproductoPorCodigo = (e) => {
 		e.preventDefault();
-		const nombreProducto = formCargarProducto["cargar-codigo"].value;
+		const nombreProducto = formCargarProducto["cargar-codigo"].value.toLowerCase();
 		if (nombreProducto.trim() === "" || nombreProducto === null) {
-			alert("Datos errones en prompt de metodo find");
+			alert("Datos errones linea 382");
 		} else {
 			const productoObtenido = objetoDeposito.encontrarProducto(nombreProducto);
-			console.log(productoObtenido, " meeetooodoooo findddd");
-			objetoDeposito.agregarCodigo(productoObtenido)
+			verificarExitenciaDeCodigo(productoObtenido);
 		}
 	}
 	formCargarProducto.addEventListener("submit", buscarproductoPorCodigo);
 }
-
-/* 
+function verListadoProducto(e){
+	e.preventDefault();
+	const contenedorProducto = document.getElementById("section-contenedor");
+    
+	objetoDeposito.renderizarProducto(objetoDeposito.deposito);
+	const btnX = document.createElement("button");
+	btnX.innerText = "X";
+    contenedorProducto.appendChild(btnX);
+	const ocultarProductos = (e)=>{
+		const contenedorProducto = document.getElementById("section-contenedor");
+        contenedorProducto.innerHTML = "";
+	}
+	btnX.addEventListener("click", ocultarProductos);
+}
+function verificarExitenciaDeCodigo(producto){
+	const containerAgregarCodigo = document.getElementById("container-agregar-codigo");
+	containerAgregarCodigo.innerHTML = "";
+    if(producto.codigo === "" || producto.codigo === undefined){
+		objetoDeposito.agregarCodigo(producto);
+	}else{
+		const cardCodigoProducto = document.createElement("div");
+            cardCodigoProducto.setAttribute("class", "cardCodigoProducto");
+            cardCodigoProducto.innerHTML = `
+                                        <div class= "container-codigo-producto">
+                                            <p class="parrafo-codigo"><span class= "span">Categoria:</span> ${producto.categoria}</p>
+                                            <p class="parrafo-codigo"><span class= "span">Nombre:</span> ${producto.nombre}</p>
+                                            <p class="parrafo-codigo"><span class= "span">Marca:</span> ${producto.marca}</p>
+                                            <p class="parrafo-codigo"><span class= "span">Codigo:</span> ${producto.codigo}</p>
+                                            <p class="parrafo-codigo"><span class= "span">Stock:</span> ${producto.stock}</p>
+                                            <p class="parrafo-codigo"><span class= "span">Precio:</span> ${producto.precio}</p>
+                                        </div>`;
+            containerAgregarCodigo.appendChild(cardCodigoProducto);
+	}
+}
 ////////////////////
-/** Opcion ver productos */
+/** Opcion ver productos *//** debo ver esto */
 const cerrarListadoProducto = (e) => {
 	e.preventDefault();
 	const listadoProducto = document.getElementById("section-contenedor");
 	listadoProducto.innerHTML = "";
 }
 function verProductos() {
-	objetoDeposito.renderizarFiltrado(objetoDeposito.deposito);
+	objetoDeposito.renderizarProducto(objetoDeposito.deposito);
+	const totalEnDeposito = objetoDeposito.calculoDeproductos();
+	objetoDeposito.renderizarCalculoDeProductos(totalEnDeposito);
 	const listadoProducto = document.getElementById("section-contenedor");
 	const btnCerrar = document.createElement("button");
 	btnCerrar.setAttribute("class", "btn-cerrar-deposito");

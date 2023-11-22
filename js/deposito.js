@@ -5,10 +5,19 @@ class Deposito {
     }
     //Metodos
     agregarProducto(producto) {
-        //pushea elemento recibido por parametro al array
-        this.deposito.push(producto);
-        console.log(this.deposito);
+        /** Verifica existencia producto */
+        const verificarExistencia = this.corroborarExistencia(producto);
+        if (verificarExistencia) {
+            // accedo indice
+            const elementoPorIndice = this.buscarProductoPorIndice(producto);
+            /// mediante indice accedo propiedad stock y sumo con stock existente
+            this.deposito[elementoPorIndice].stock += producto.stock;
+        } else {
+            //pushea elemento recibido por parametro al array
+            this.deposito.push(producto);
+        }
     }
+    ////////////////////////////////
     filtrarProducto(prod) {
         return this.deposito.filter(elemento => elemento.categoria === prod);
     }
@@ -18,11 +27,9 @@ class Deposito {
 
 
     //////////////////////////////////////
-    renderizarFiltrado(prod)/**Luego cambiar nombre de esta funcion */ {
+    renderizarProducto(prod) {
         const contenedorProducto = document.getElementById("section-contenedor");
-        /** Tene que ver que cuando el producto se repita ir sumandolo y no duplicarlo */
         contenedorProducto.innerHTML = "";
-
         prod.forEach((el) => {
             const lista = document.createElement("div");
             lista.setAttribute("class", "carduno-producto");
@@ -38,65 +45,61 @@ class Deposito {
         });
     }
     agregarCodigo(objet) {
-        console.log("ooobbjeetoo ", objet);
-        console.log(objet.codigo, " Acaaaaziiiiiiiiiiiiiiiiii");
         const containerAgregarCodigo = document.getElementById("container-agregar-codigo");
         containerAgregarCodigo.innerHTML = ``;
-        console.log(containerAgregarCodigo, " containerAgregarCodigo");
-        if (objet.codigo === "" || objet.codigo === undefined) {
-            const cardAgregarCodigo = document.createElement("div");
-            cardAgregarCodigo.innerHTML = `
+        const cardAgregarCodigo = document.createElement("div");
+        cardAgregarCodigo.innerHTML = `
                                             <form id= "form-agregar-codigo" class= "form-cargar-codigo">
                                                 <h5 class= "subtitulo-cargar-codigo">Ingrese codigo de ${objet.nombre} por favor</h5>
                                                 <input name="input-agregar-codigo" type="text" placeholder="Agregar codigo" class= "input-cargar-codigo">
                                                 <button class= "btn-agregar-codigo">Aceptar</button>
                                             </form>`;
-            containerAgregarCodigo.appendChild(cardAgregarCodigo);
-            const formAgregarCodigo = document.getElementById("form-agregar-codigo");
-            const productoSinCodigo = (e) => {
-                e.preventDefault();
-                const inputCodigo = formAgregarCodigo["input-agregar-codigo"].value;
-                console.log(inputCodigo, " inputCodigo");
+        containerAgregarCodigo.appendChild(cardAgregarCodigo);
+        const formAgregarCodigo = document.getElementById("form-agregar-codigo");
+        const productoSinCodigo = (e) => {
+            e.preventDefault();
+            const inputCodigo = formAgregarCodigo["input-agregar-codigo"].value.toLowerCase();
+            if (inputCodigo !== "" && inputCodigo.length >= 7) {
                 objet.codigo = inputCodigo;
                 const cardCodigoProducto = document.createElement("div");
                 cardCodigoProducto.setAttribute("class", "cardCodigoProducto");
                 cardCodigoProducto.innerHTML = `
-                                        <div class= "container-codigo-producto">
-                                            <p class="parrafo-codigo"><span class= "span">Categoria:</span> ${objet.categoria}</p>
-                                            <p class="parrafo-codigo"><span class= "span">Nombre:</span> ${objet.nombre}</p>
-                                            <p class="parrafo-codigo"><span class= "span">Marca: </span>${objet.marca}</p>
-                                            <p class="parrafo-codigo"><span class= "span">Codigo:</span> ${objet.codigo}</p>
-                                            <p class="parrafo-codigo"><span class= "span">Stock:</span> ${objet.stock}</p>
-                                            <p class="parrafo-codigo"><span class= "span">Precio:</span> ${objet.precio}</p>
-                                        </div>`;
+                                            <div class= "container-codigo-producto">
+                                                <p class="parrafo-codigo"><span class= "span">Categoria:</span> ${objet.categoria}</p>
+                                                <p class="parrafo-codigo"><span class= "span">Nombre:</span> ${objet.nombre}</p>
+                                                <p class="parrafo-codigo"><span class= "span">Marca: </span>${objet.marca}</p>
+                                                <p class="parrafo-codigo"><span class= "span">Codigo:</span> ${objet.codigo}</p>
+                                                <p class="parrafo-codigo"><span class= "span">Stock:</span> ${objet.stock}</p>
+                                                <p class="parrafo-codigo"><span class= "span">Precio:</span> ${objet.precio}</p>
+                                            </div>`;
                 containerAgregarCodigo.appendChild(cardCodigoProducto);
+            } else {
+                alert("Error por favor completar los campos");
             }
-            formAgregarCodigo.addEventListener("submit", productoSinCodigo)
 
-        } else {
-            console.log("Holiiiiiiiiiiiii");
-            const cardCodigoProducto = document.createElement("div");
-            cardCodigoProducto.setAttribute("class", "cardCodigoProducto");
-            cardCodigoProducto.innerHTML = `
-                                        <div class= "container-codigo-producto">
-                                            <p class="parrafo-codigo"><span class= "span">Categoria:</span> ${objet.categoria}</p>
-                                            <p class="parrafo-codigo"><span class= "span">Nombre:</span> ${objet.nombre}</p>
-                                            <p class="parrafo-codigo"><span class= "span">Marca:</span> ${objet.marca}</p>
-                                            <p class="parrafo-codigo"><span class= "span">Codigo:</span> ${objet.codigo}</p>
-                                            <p class="parrafo-codigo"><span class= "span">Stock:</span> ${objet.stock}</p>
-                                            <p class="parrafo-codigo"><span class= "span">Precio:</span> ${objet.precio}</p>
-                                        </div>`;
-            containerAgregarCodigo.appendChild(cardCodigoProducto);
         }
+        formAgregarCodigo.addEventListener("submit", productoSinCodigo);
     }
-    corroborarExistencia(elemento) {
-        return this.deposito.some((el) => el.nombre === elemento.nombre);
+    corroborarExistencia(producto) {
+        return this.deposito.some((el) => el.codigo === producto.codigo);
     }
-    buscarProductoPorIndice(objet) {
-        return this.deposito.findIndex((el) => el.stock === objet.stock);
+    buscarProductoPorIndice(producto) {
+        return this.deposito.findIndex((el) => el.codigo === producto.codigo);
     }
-    accederPropiedadEnArray(indice) {
-        return this.deposito[indice].stock;
+    calculoDeproductos() {
+        return this.deposito.reduce((acc, el) => acc += el.precio * el.stock, 0);
+    }
+    renderizarCalculoDeProductos(total) {
+        const contenedorProducto = document.getElementById("section-contenedor");
+        const containerCalculo = document.createElement("div");
+        containerCalculo.setAttribute("class", "container-Caldulo-producto");
+        containerCalculo.innerHTML = `
+                                        <p>Total: $${total}</p>
+                                        `;
+        contenedorProducto.appendChild(containerCalculo);
+    }
+    calculoDeproductosFiltrados(producto){
+        return producto.reduce((acc,el)=> acc += el.precio*el.stock, 0);
+    }
 
-    }
 }
