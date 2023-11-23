@@ -1,7 +1,7 @@
 class Deposito {
     //constructor
     constructor() {
-        this.deposito = []; //Array
+        this.deposito = JSON.parse(localStorage.getItem("deposito")) || []; //Array
     }
     //Metodos
     agregarProducto(producto) {
@@ -16,6 +16,7 @@ class Deposito {
             //pushea elemento recibido por parametro al array
             this.deposito.push(producto);
         }
+        localStorage.setItem("deposito", JSON.stringify(this.deposito));
     }
     ////////////////////////////////
     filtrarProducto(prod) {
@@ -98,8 +99,8 @@ class Deposito {
                                         `;
         contenedorProducto.appendChild(containerCalculo);
     }
-    calculoDeproductosFiltrados(producto){
-        return producto.reduce((acc,el)=> acc += el.precio*el.stock, 0);
+    calculoDeproductosFiltrados(producto) {
+        return producto.reduce((acc, el) => acc += el.precio * el.stock, 0);
     }
 
 }
