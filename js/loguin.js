@@ -13,7 +13,7 @@ const baseDeDatos = [
     },
 ];
 
-
+localStorage.setItem("baseDeDatos",JSON.stringify(baseDeDatos));
 /** Aplicando DOM */
 
 const formularioLogin = document.getElementById("form-login");
@@ -32,6 +32,7 @@ const loginDatosUsuario = (event) => {
             if(userValido.contrasenia === contraseniaUsuario){
                 alert(`Los datos son correctos, bienvenido ${userValido.usuario}`);
                 formularioLogin.classList.add("oculto");
+                
                 menuEnPantalla();
 
             }else{

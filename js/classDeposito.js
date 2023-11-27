@@ -25,12 +25,12 @@ class Deposito {
     encontrarProducto(prod) {
         return this.deposito.find(elemento => elemento.nombre === prod);
     }
-
-
+    
     //////////////////////////////////////
     renderizarProducto(prod) {
         const contenedorProducto = document.getElementById("section-contenedor");
-        contenedorProducto.innerHTML = "";
+            contenedorProducto.innerHTML = "";
+
         prod.forEach((el) => {
             const lista = document.createElement("div");
             lista.setAttribute("class", "carduno-producto");
@@ -45,9 +45,11 @@ class Deposito {
             contenedorProducto.appendChild(lista);
         });
     }
+    /**const containerAgregarCodigo = document.getElementById("container-agregar-codigo");
+        containerAgregarCodigo.innerHTML = ``; */
     agregarCodigo(objet) {
-        const containerAgregarCodigo = document.getElementById("container-agregar-codigo");
-        containerAgregarCodigo.innerHTML = ``;
+        const formProductoCarga = document.getElementById("carga-producto");
+        formProductoCarga.innerHTML = "";
         const cardAgregarCodigo = document.createElement("div");
         cardAgregarCodigo.innerHTML = `
                                             <form id= "form-agregar-codigo" class= "form-cargar-codigo">
@@ -55,7 +57,7 @@ class Deposito {
                                                 <input name="input-agregar-codigo" type="text" placeholder="Agregar codigo" class= "input-cargar-codigo">
                                                 <button class= "btn-agregar-codigo">Aceptar</button>
                                             </form>`;
-        containerAgregarCodigo.appendChild(cardAgregarCodigo);
+        formProductoCarga.appendChild(cardAgregarCodigo);
         const formAgregarCodigo = document.getElementById("form-agregar-codigo");
         const productoSinCodigo = (e) => {
             e.preventDefault();
@@ -64,6 +66,7 @@ class Deposito {
                 objet.codigo = inputCodigo;
                 const cardCodigoProducto = document.createElement("div");
                 cardCodigoProducto.setAttribute("class", "cardCodigoProducto");
+                formProductoCarga.innerHTML = "";
                 cardCodigoProducto.innerHTML = `
                                             <div class= "container-codigo-producto">
                                                 <p class="parrafo-codigo"><span class= "span">Categoria:</span> ${objet.categoria}</p>
@@ -73,7 +76,7 @@ class Deposito {
                                                 <p class="parrafo-codigo"><span class= "span">Stock:</span> ${objet.stock}</p>
                                                 <p class="parrafo-codigo"><span class= "span">Precio:</span> ${objet.precio}</p>
                                             </div>`;
-                containerAgregarCodigo.appendChild(cardCodigoProducto);
+                formProductoCarga.appendChild(cardCodigoProducto);
             } else {
                 alert("Error por favor completar los campos");
             }

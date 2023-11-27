@@ -264,7 +264,6 @@ const validarInputproducto = (e) => {
 	const codigo = formProducto["opcion-codigo"].value.toUpperCase();
 	const stock = parseInt(formProducto["opcion-stock"].value);
 	const precio = parseFloat(formProducto["opcion-precio"].value);
-	//// validando input
 	const validacionPrompt = validandoPromptDeposito(categoria, nombre, marca, codigo, stock, precio);
 	if (validacionPrompt) {
 		const productoDelUsuario = new Producto({
@@ -295,10 +294,12 @@ function validarCargaDeProducto() {
 
 
 /** metodo filter */
-
+/* const sectionProductoFiltrado = document.getElementById("section-producto-filtrado");
+	sectionProductoFiltrado.innerHTML = ``; */
 
 function buscarProductoPorcategoria() {
-	const sectionProductoFiltrado = document.getElementById("section-producto-filtrado");
+	const formProductoCarga = document.getElementById("carga-producto");
+	formProductoCarga.innerHTML = "";
 	const cardProductoFiltrado = document.createElement("div");
 	cardProductoFiltrado.setAttribute("class", "container-form-filtrado");
 	cardProductoFiltrado.innerHTML = `
@@ -311,7 +312,7 @@ function buscarProductoPorcategoria() {
 	                                        <button class="boton-producto" type="reset">Cancelar</button>
 											<button id= "btn-cerrar" class="boton-producto cerrar">Cerrar</button>
                                         </form>`;
-	sectionProductoFiltrado.appendChild(cardProductoFiltrado);
+	formProductoCarga.appendChild(cardProductoFiltrado);
 	const formularioProductoFiltrado = document.getElementById("form-filtrado-producto");
 	const productoFiltrado = (evento) => {
 		evento.preventDefault();
@@ -345,10 +346,11 @@ function vaciarListaproductoFiltrado(e) {
 //////////////////////////////////////////////////////////////////////
 
 /** Buscar producto por nombre */
-
+/* const containerBuscarProducto = document.getElementById("container-buscar-producto");
+	containerBuscarProducto.innerHTML = ""; */
 function buscarProductoPorNombre() {
-	const containerBuscarProducto = document.getElementById("container-buscar-producto");
-	containerBuscarProducto.innerHTML = "";
+	const formProductoCarga = document.getElementById("carga-producto");
+	formProductoCarga.innerHTML = "";
 	const cardNombreProducto = document.createElement("div");
 	cardNombreProducto.setAttribute("class", "card-codigo-prod");
 	cardNombreProducto.innerHTML = `
@@ -358,17 +360,18 @@ function buscarProductoPorNombre() {
                                         <button class= "btn-buscar-codigo">Aceptar</button>
 										<button id= "ver-listado" class= "btn-buscar-codigo">Ver listado</button>
                                     </form>`;
-	containerBuscarProducto.appendChild(cardNombreProducto);
+	formProductoCarga.appendChild(cardNombreProducto);
 	const formCargarProducto = document.getElementById("form-cargar-codigo");
 	const btnVerListado = document.getElementById("ver-listado");
 	btnVerListado.addEventListener("click", verListadoProducto);
 	const buscarproductoPorCodigo = (e) => {
 		e.preventDefault();
 		const nombreProducto = formCargarProducto["cargar-codigo"].value.toLowerCase();
-		if (nombreProducto.trim() === "" || nombreProducto === null) {
+		if (nombreProducto.trim() === "") {
 			alert("Datos errones linea 382");
 		} else {
 			const productoObtenido = objetoDeposito.encontrarProducto(nombreProducto);
+			console.log(productoObtenido, " productoObtenido linea 374")
 			verificarExitenciaDeCodigo(productoObtenido);
 		}
 	}
@@ -388,9 +391,11 @@ function verListadoProducto(e){
 	}
 	btnX.addEventListener("click", ocultarProductos);
 }
+/* const containerAgregarCodigo = document.getElementById("container-agregar-codigo");
+	containerAgregarCodigo.innerHTML = ""; */
 function verificarExitenciaDeCodigo(producto){
-	const containerAgregarCodigo = document.getElementById("container-agregar-codigo");
-	containerAgregarCodigo.innerHTML = "";
+	const formProductoCarga = document.getElementById("carga-producto");
+	formProductoCarga.innerHTML = "";
     if(producto.codigo === "" || producto.codigo === undefined){
 		objetoDeposito.agregarCodigo(producto);
 	}else{
@@ -405,7 +410,7 @@ function verificarExitenciaDeCodigo(producto){
                                             <p class="parrafo-codigo"><span class= "span">Stock:</span> ${producto.stock}</p>
                                             <p class="parrafo-codigo"><span class= "span">Precio:</span> ${producto.precio}</p>
                                         </div>`;
-            containerAgregarCodigo.appendChild(cardCodigoProducto);
+            formProductoCarga.appendChild(cardCodigoProducto);
 	}
 }
 ////////////////////

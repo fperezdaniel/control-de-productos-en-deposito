@@ -271,19 +271,22 @@
 
 /* Fin total carrito */
 /* Busqueda de codigo */
-.buscar-codigo-producto {
+/* .buscar-codigo-producto {
     border-radius: 7px;
     margin: 100px 600px;
     display: flex;
     align-items: center;
     justify-content: center;
-}
+} */
 
 
 .form-container-codigo {
     margin: 10px 100px;
-
-}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+} 
 
 .titulo-buscar-codigo {
     text-align: center;
